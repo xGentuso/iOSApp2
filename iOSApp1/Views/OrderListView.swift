@@ -15,16 +15,13 @@ struct OrderListView: View {
         List {
             ForEach(viewModel.orders) { order in
                 OrderRowView(order: order)
-                    // Remove default list row separators for a cleaner look
                     .listRowSeparator(.hidden)
-                    // Optionally remove default background color (iOS 16+)
                     .listRowBackground(Color.clear)
             }
             .onDelete(perform: viewModel.removeOrder)
         }
         // Apply a list style that suits your design
         .listStyle(.plain)
-        // For iOS 16+, remove the default list background if you want
         .scrollContentBackground(.hidden)
         .background(Color(.systemGroupedBackground)) // behind the list
         

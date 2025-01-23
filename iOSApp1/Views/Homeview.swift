@@ -32,8 +32,6 @@ struct HomeView: View {
             .tabItem {
                 Label("Orders", systemImage: "cup.and.saucer.fill")
             }
-            
-            // OPTIONAL SETTINGS TAB (tag: 2), etc...
             // MARK: - Settings Tab (Optional)
             NavigationStack {
                 VStack {
