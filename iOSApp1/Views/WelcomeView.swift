@@ -1,15 +1,9 @@
-//
-//  WelcomeView.swift
-//  TimHortonsApp
-//
-//  Created by ryan mota on 2025-01-23.
-//
-
 import SwiftUI
 
 struct WelcomeView: View {
     @ObservedObject var viewModel: CoffeeOrderViewModel
     @Binding var selectedTab: Int  // Binding to the parent's selectedTab
+    var logoutAction: () -> Void  // ✅ Added logoutAction closure
     
     var body: some View {
         ZStack {
@@ -21,7 +15,7 @@ struct WelcomeView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 20) {
-                Text("Welcome to Tim Hortons App")
+                Text("Welcome to the Tim Hortons App")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.red)
@@ -38,7 +32,7 @@ struct WelcomeView: View {
                     .foregroundColor(.red)
                     .padding(.vertical, 10)
                 
-                // MARK: - Switch Tab to the Orders tab
+                // MARK: - View Orders Button
                 Button {
                     selectedTab = 1  // Switch to the Orders tab
                 } label: {
@@ -51,15 +45,40 @@ struct WelcomeView: View {
                         .cornerRadius(8)
                 }
                 .padding(.top, 10)
+                
+                // MARK: - View Menu Button
+                Button {
+                    selectedTab = 2  // Switch to the Menu tab
+                } label: {
+                    Text("View Menu")
+                        .font(.headline)
+                        .padding()
+                        .frame(minWidth: 180)
+                        .background(Color.red.opacity(0.7))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
             }
             .padding()
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: logoutAction) {
+                    Text("Logout")
+                        .font(.headline)
+                        .foregroundColor(.red)
+                        .padding(8)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .shadow(radius: 1)
+                }
+            }
         }
     }
 }
 
 struct WelcomeView_Previews: PreviewProvider {
     static var previews: some View {
-        // Provide a dummy binding for the tab in previews
-        WelcomeView(viewModel: CoffeeOrderViewModel(), selectedTab: .constant(0))
+        WelcomeView(viewModel: CoffeeOrderViewModel(), selectedTab: .constant(0), logoutAction: {})
     }
 }

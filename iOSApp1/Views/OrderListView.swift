@@ -1,51 +1,57 @@
-//
-//  OrderListView.swift
-//  TimHortonsApp
-//
-//  Created by ryan mota on 2025-01-23.
-//
-
 import SwiftUI
 
 struct OrderListView: View {
     @ObservedObject var viewModel: CoffeeOrderViewModel
+    
     @State private var showingAddOrder = false
     
     var body: some View {
-        List {
-            ForEach(viewModel.orders) { order in
-                OrderRowView(order: order)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
-            }
-            .onDelete(perform: viewModel.removeOrder)
-        }
-        // Apply a list style that suits your design
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .background(Color(.systemGroupedBackground)) // behind the list
-        
-        .navigationTitle("Tim Hortons Orders")
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showingAddOrder = true
-                } label: {
-                    Image(systemName: "plus")
+        NavigationView {
+            List {
+                if viewModel.orders.isEmpty {
+                    Text("No orders yet. Tap the '+' to add your first order!")
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                } else {
+                    ForEach(viewModel.orders) { order in
+                        VStack(alignment: .leading) {
+                            Text(order.personName)
+                                .font(.headline)
+                            Text("\(order.size) \(order.coffeeType)")
+                                .foregroundColor(.secondary)
+                            Text("Sugar: \(order.sugar), Cream: \(order.cream)")
+                                .font(.caption)
+                        }
+                        .padding(.vertical, 5)
+                    }
+                    .onDelete(perform: viewModel.removeOrder)
                 }
             }
-        }
-        // Show the AddOrderView as a sheet
-        .sheet(isPresented: $showingAddOrder) {
-            AddOrderView(viewModel: viewModel)
+            .listStyle(InsetGroupedListStyle())
+            .navigationTitle("Orders")
+            .toolbar {
+                // Add Button with "+" Icon
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingAddOrder = true
+                    }) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.red)
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAddOrder) {
+                AddOrderView(viewModel: viewModel)
+            }
         }
     }
 }
 
+// MARK: - Preview
 struct OrderListView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            OrderListView(viewModel: CoffeeOrderViewModel())
-        }
+        OrderListView(viewModel: CoffeeOrderViewModel())
     }
 }

@@ -1,17 +1,17 @@
-//
-//  iOSApp1App.swift
-//  iOSApp1
-//
-//  Created by ryan mota on 2025-01-23.
-//
-
+// iOSApp1App.swift
 import SwiftUI
 
 @main
 struct iOSApp1App: App {
+    @StateObject var authViewModel = AuthViewModel()  // Initialize AuthViewModel once
+    
     var body: some Scene {
-            WindowGroup {
-                HomeView() // Uses TabView
+        WindowGroup {
+            if authViewModel.isLoggedIn {
+                MainTabView(authViewModel: authViewModel)
+            } else {
+                LoginView(authViewModel: authViewModel)
             }
         }
     }
+}
